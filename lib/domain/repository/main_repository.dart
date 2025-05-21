@@ -23,7 +23,7 @@ class MainRepository {
     try {
       final data = await LocalData.loadListJson(key: LocalDataKey.notes);
 
-      if (data.isNotEmpty) {
+      if (data.isNotEmpty && data.first['error'] == null) {
         notes = data.map((e) => Note.fromJson(e)).toList();
       } else {
         await saveNotesToLocal();
@@ -36,6 +36,7 @@ class MainRepository {
 
   /// сохранение заметок в локальное хранилище
   Future<void> saveNotesToLocal() async {
+    Logger.i('сохранение заметок в локальное хранилище ${notes.length}');
     await LocalData.saveListJson(
         json: notes.map((e) => e.toJson()).toList(), key: LocalDataKey.notes);
   }
